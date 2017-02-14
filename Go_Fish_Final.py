@@ -1,8 +1,32 @@
 import random
 from deck import Deck
 import time
-difficulty_level = input ("Welcome to Go Fish: the computer program! you can play go fish against a computer program here based on 3 different difficulty levels:\n"+
-                          "1: The computer plays randomly.\n"+"2: The computer plays with some strategy.\n"+"3: The computer lies.\n")
+
+#input validation 1
+difficulty_level = None
+while difficulty_level is None:
+    difficulty_level_value = input(
+        "Welcome to Go Fish: the computer program! you can play go fish against a computer program here based on 3 different difficulty levels:\n" +
+        "1: The computer plays randomly.\n" + "2: The computer plays with some strategy.\n" + "3: The computer lies.\n")
+    #make sure only integers are entered
+    try:
+        difficulty_level = int(difficulty_level_value)
+    except ValueError:
+        print("I'm sorry. {input} is not a number.".format(input=difficulty_level_value))
+        difficulty_level = None
+        continue
+    else:
+        #successful input!
+        #now validate the number
+        if difficulty_level > 3 or difficulty_level is 0:
+            print("The number you input is not a difficulty level")
+            difficulty_level_value = None
+            continue
+        #successful difficulty level entered! break the loop
+        else:
+            break
+
+
 PLAYER_HAND = []
 COMPUTER_HAND = []
 PLAYER_SCORE = 0
@@ -174,8 +198,16 @@ def Player_Turn():
     elif len(PLAYER_HAND) !=0:
         PLAYER_HAND.sort()
         print("YOUR HAND: ",PLAYER_HAND,"\n")
-        card = input ("What do you ask for? ")
-        response = Computer_Response(COMPUTER_HAND, difficulty_level, card) # function to determine computer response
+        #input validation 2: the electric boogaloo
+        card = None
+        while card is None:
+            card = input("What do you ask for")
+            if card not in PLAYER_HAND:
+                print("The card you asked for is not in your hand. Try again.")
+                card = None
+                continue
+            else:
+                break        response = Computer_Response(COMPUTER_HAND, difficulty_level, card) # function to determine computer response
         #if computer has what the player asked for pass the cards
         if response == True:
             SUCCESS_COUNTER +=1
@@ -194,9 +226,16 @@ def Player_Turn():
                 deck.remove(drawn_card)
                 print("You drew a ",drawn_card,"\n")
                 #if player draws what they asked for. 
+                #input validation 3 times a charm
                 if drawn_card == card:
-                    card_2 = input ("You drew what you asked for, ask for another card: ")
-                    PLAYER_HAND, PLAYER_SCORE = Make_Books(PLAYER_HAND,PLAYER_SCORE)
+                    card_2 = None
+                    while card_2 is None:
+                        card_2 = input("You drew what you asked for, ask for another card: ")
+                        if card_2 not in PLAYER_HAND:
+                            print("That card is not in your hand. Please try again")
+                            card_2 = None
+                        else:
+                            break                    PLAYER_HAND, PLAYER_SCORE = Make_Books(PLAYER_HAND,PLAYER_SCORE)
                     PLAYER_HAND.sort()
                     print ("YOUR HAND: ",PLAYER_HAND,"\n")
                     reponse = Computer_Response(COMPUTER_HAND, difficulty_level,card_2) # function to determine computer response
