@@ -19,8 +19,8 @@ while difficulty_level is None:
         #successful input!
         #now validate the number
         if difficulty_level > 3 or difficulty_level == 0:
-            print("The number you input is not a difficulty level")
-            difficulty_level_value = None
+            print("The number you input is not a difficulty level. Please try again")
+            difficulty_level = None
             continue
         #successful difficulty level entered! break the loop
         else:
